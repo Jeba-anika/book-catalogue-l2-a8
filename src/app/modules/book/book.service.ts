@@ -9,8 +9,12 @@
 // import { JwtPayload } from 'jsonwebtoken'
 // import { User } from '../users/users.model'
 
-import { Book } from '@prisma/client'
+import { Book, Prisma } from '@prisma/client'
 import prisma from '../../../shared/prisma'
+import { IpaginationOptions } from '../../../interfaces/pagination'
+import { paginationHelpers } from '../../../helpers/paginationHelper'
+import { IBookFilterRequest } from './book.interface'
+import { bookSearchableFields } from './book.constants'
 
 const createBook = async (
   data: Book
@@ -28,24 +32,59 @@ const createBook = async (
   })
   return result
 }
-const getAllBooks = async(queries)=>{
-    const sortBy:string = queries.sortBy ? queries.sortBy :  'id'
-    const sortOrder: string = queries.sortOrder ? queries.sortOrder :  'desc'
-    const pageNumber = queries.page ? Number(queries.page): 1 
-    const take = queries.size ? Number(queries.size) : 10
-    const skip = (pageNumber-1) * take
+const getAllBooks = async(
+    options: IpaginationOptions,
+    filters: IBookFilterRequest
+)=>{
+    
+    const {page,skip, size,sortBy,sortOrder} = paginationHelpers.calculatePagination(options)
+    const {search,minPrice,maxPrice,category, ...filtersData} = filters
+    const andConditions =[]
 
+    if(search){
+        andConditions.push({
+            OR: bookSearchableFields.map((field)=>({
+                [field]:{
+                    contains: search,
+                    mode: 'insensitive'
+                }
+            }))
+        })
+    }
 
+    if(Object.keys(filtersData).length > 0){
+        andConditions.push({
+            AND: Object.keys(filtersData).map((key)=>({
+                [key] : (filtersData as any)[key]
+            }))
+        })
+    }
+    if(minPrice){
+        andConditions.push({
+            price: {
+                gte: Number(minPrice)
+            }
+        })
+    }
+    if(maxPrice){
+        andConditions.push({
+            price: {
+                lte: Number(maxPrice)
+            }
+        })
+    }
+    if(category){
+        andConditions.push({
+            categoryId: category
+        })
+    }
 
+    const whereCondition: Prisma.BookWhereInput = andConditions.length > 0 ? {AND: andConditions}: {} 
     
 
     const result = await prisma.book.findMany({
-        where:{
-            title:{
-                equals: "The Catcher in the Rye2"
-            }
-        }, 
-        take,
+        where: whereCondition, 
+        take: size,
         skip,
         orderBy: {
             [sortBy] : sortOrder
@@ -54,10 +93,10 @@ const getAllBooks = async(queries)=>{
     const total = await prisma.book.count()
     return {
         meta: {
-            page: pageNumber,
-            size: take,
+            page,
+            size,
             total,
-            totalPage: Math.ceil(total/take)
+            totalPage: Math.ceil(total/size)
         },
         data:result
     }

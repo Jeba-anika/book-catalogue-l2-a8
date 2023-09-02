@@ -5,6 +5,8 @@ import sendResponse from '../../../shared/sendResponse'
 import { BookService } from './book.service'
 import { Book } from '@prisma/client'
 import httpStatus from 'http-status'
+import pick from '../../../shared/pick'
+import { bookFilterableFields } from './book.constants'
 // import pick from '../../../shared/pick'
 // import { bookFilterableFields } from './book.constants'
 // import { paginationFields } from '../../../constants/pagination'
@@ -22,12 +24,14 @@ const createBook = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getAllBooks = catchAsync(async (req: Request, res: Response) => {
-  const result = await BookService.getAllBooks(req.query)
-  sendResponse(res,{
+  const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder'])
+  const filters = pick(req.query, bookFilterableFields)
+  const result = await BookService.getAllBooks(options, filters)
+  sendResponse(res, {
     statusCode: httpStatus.OK,
-    success:true,
+    success: true,
     message: 'Books retrieved successfully',
-    data:result
+    data: result,
   })
 })
 // const getAllBooks = catchAsync(async (req: Request, res: Response) => {
