@@ -44,7 +44,7 @@ const getAllBooks = async(queries)=>{
             title:{
                 equals: "The Catcher in the Rye2"
             }
-        },
+        }, 
         take,
         skip,
         orderBy: {
