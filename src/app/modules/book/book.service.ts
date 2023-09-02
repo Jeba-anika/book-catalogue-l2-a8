@@ -102,7 +102,6 @@ const getAllBooks = async (
   }
 }
 
-
 const getAllBooksByCategory = async (
   categoryId: string,
   options: IpaginationOptions,
@@ -113,7 +112,7 @@ const getAllBooksByCategory = async (
   const { search, minPrice, maxPrice, category, ...filtersData } = filters
   const andConditions = []
   andConditions.push({
-    categoryId
+    categoryId,
   })
 
   if (search) {
@@ -178,41 +177,37 @@ const getAllBooksByCategory = async (
 }
 
 const getSingleBook = async (id: string): Promise<Book | null> => {
-  const result = await prisma.book.findUnique({where:{id}})
+  const result = await prisma.book.findUnique({ where: { id } })
   return result
 }
 
 const updateBook = async (
   id: string,
-  updatedData: Partial<Book>,
-  
+  updatedData: Partial<Book>
 ): Promise<Book | null> => {
-//   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
-//   if (!selectedBook) {
-//     throw new ApiError(401, 'Unauthorized access')
-//   }
+  //   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
+  //   if (!selectedBook) {
+  //     throw new ApiError(401, 'Unauthorized access')
+  //   }
   const result = await prisma.book.update({
-    where:{
-        id
+    where: {
+      id,
     },
-    data: updatedData
+    data: updatedData,
   })
   return result
 }
 
-// const deleteBook = async (id: string, ownerInfo: JwtPayload | null) => {
-//   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
-//   if (!selectedBook) {
-//     throw new ApiError(401, 'Unauthorized access')
-//   }
-//   const result = await Book.findOneAndDelete(
-//     { _id: id },
-//     {
-//       new: true,
-//     }
-//   )
-//   return result
-// }
+const deleteBook = async (id: string) => {
+  //   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
+  //   if (!selectedBook) {
+  //     throw new ApiError(401, 'Unauthorized access')
+  //   }
+  const result = await prisma.book.delete({
+    where: { id },
+  })
+  return result
+}
 
 // const addToWishlist = async (id: string, ownerInfo: JwtPayload | null) => {
 //   const book = await Book.findById(id)
@@ -283,7 +278,7 @@ export const BookService = {
   getAllBooksByCategory,
   getSingleBook,
   updateBook,
-  //   deleteBook,
+  deleteBook,
   //   addToWishlist,
   //   addToCurrentlyReading,
   //   addToPlanToReadSoon,
