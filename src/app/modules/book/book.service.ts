@@ -182,20 +182,23 @@ const getSingleBook = async (id: string): Promise<Book | null> => {
   return result
 }
 
-// const updateBook = async (
-//   id: string,
-//   updatedData: Partial<IBook>,
-//   ownerInfo: JwtPayload | null
-// ): Promise<IBook | null> => {
+const updateBook = async (
+  id: string,
+  updatedData: Partial<Book>,
+  
+): Promise<Book | null> => {
 //   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
 //   if (!selectedBook) {
 //     throw new ApiError(401, 'Unauthorized access')
 //   }
-//   const result = await Book.findOneAndUpdate({ _id: id }, updatedData, {
-//     new: true,
-//   }).populate('owner')
-//   return result
-// }
+  const result = await prisma.book.update({
+    where:{
+        id
+    },
+    data: updatedData
+  })
+  return result
+}
 
 // const deleteBook = async (id: string, ownerInfo: JwtPayload | null) => {
 //   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
@@ -279,7 +282,7 @@ export const BookService = {
   getAllBooks,
   getAllBooksByCategory,
   getSingleBook,
-  //   updateBook,
+  updateBook,
   //   deleteBook,
   //   addToWishlist,
   //   addToCurrentlyReading,

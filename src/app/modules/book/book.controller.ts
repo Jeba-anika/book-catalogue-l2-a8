@@ -35,19 +35,23 @@ const getAllBooks = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-
-const getAllBooksByCategory = catchAsync(async (req: Request, res: Response) => {
-  const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder'])
-  const filters = pick(req.query, bookFilterableFields)
-  const result = await BookService.getAllBooksByCategory(req.params.categoryId,options, filters)
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Books with associated category data fetched successfully',
-    data: result,
-  })
-})
-
+const getAllBooksByCategory = catchAsync(
+  async (req: Request, res: Response) => {
+    const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder'])
+    const filters = pick(req.query, bookFilterableFields)
+    const result = await BookService.getAllBooksByCategory(
+      req.params.categoryId,
+      options,
+      filters
+    )
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Books with associated category data fetched successfully',
+      data: result,
+    })
+  }
+)
 
 const getSingleBook = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id
@@ -60,19 +64,18 @@ const getSingleBook = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-// const updateBook = catchAsync(async (req: Request, res: Response) => {
-//   const ownerInfo = req.user
-//   const id = req.params.id
+const updateBook = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
 
-//   const updatedBook = req.body
-//   const result = await BookService.updateBook(id, updatedBook, ownerInfo)
-//   sendResponse<IBook>(res, {
-//     statusCode: 200,
-//     success: true,
-//     message: 'Book edited successfully',
-//     data: result,
-//   })
-// })
+  const updatedBook = req.body
+  const result = await BookService.updateBook(id, updatedBook)
+  sendResponse<Book>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Book edited successfully',
+    data: result,
+  })
+})
 
 // const deleteBook = catchAsync(async (req: Request, res: Response) => {
 //   const id = req.params.id
@@ -144,7 +147,7 @@ export const BookController = {
   getAllBooks,
   getAllBooksByCategory,
   getSingleBook,
-  //   updateBook,
+  updateBook,
   //   deleteBook,
   //   addToWishlist,
   //   addToCurrentlyReading,
