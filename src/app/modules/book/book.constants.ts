@@ -7,4 +7,4 @@ export const bookFilterableFields = [
   'author',
   'genre',
 ]
-export const bookSearchableFields = ['title', 'genre', 'author','category']
+export const bookSearchableFields = ['title', 'genre', 'author']
