@@ -131,6 +131,12 @@ const getUser = async (id: string): Promise<Partial<User> | null> => {
 }
 
 const updateUser = async (id: string, payload: Partial<User>):Promise<Partial<User>> => {
+  const isExist = await prisma.user.findUnique({
+    where:{id}
+  })
+  if(!isExist){
+    throw new ApiError(httpStatus.BAD_REQUEST,"User didn't found!")
+  }
   const result = await prisma.user.update({
     where: {
       id,
