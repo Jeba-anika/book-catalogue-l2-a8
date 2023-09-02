@@ -34,6 +34,7 @@ const router = express.Router()
 // )
 router.post('/create-book', BookController.createBook)
 router.get('/', BookController.getAllBooks)
+router.get('/:id', BookController.getSingleBook)
 router.get('/:categoryId/category', BookController.getAllBooksByCategory)
 
 export const BookRoutes = router

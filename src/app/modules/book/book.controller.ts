@@ -34,6 +34,8 @@ const getAllBooks = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+
+
 const getAllBooksByCategory = catchAsync(async (req: Request, res: Response) => {
   const options = pick(req.query, ['size', 'page', 'sortBy', 'sortOrder'])
   const filters = pick(req.query, bookFilterableFields)
@@ -45,29 +47,18 @@ const getAllBooksByCategory = catchAsync(async (req: Request, res: Response) => 
     data: result,
   })
 })
-// const getAllBooks = catchAsync(async (req: Request, res: Response) => {
-//   const filters = pick(req.query, bookFilterableFields)
-//   const paginationOptions = pick(req.query, paginationFields)
-//   const result = await BookService.getAllBooks(filters, paginationOptions)
-//   sendResponse<IBook[]>(res, {
-//     statusCode: 200,
-//     success: true,
-//     message: 'Books retrieved successfully',
-//     data: result.data,
-//     meta: result.meta,
-//   })
-// })
 
-// const getSingleBook = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id
-//   const result = await BookService.getSingleBook(id)
-//   sendResponse<IBook>(res, {
-//     statusCode: 200,
-//     success: true,
-//     message: 'Book retrieved successfully',
-//     data: result,
-//   })
-// })
+
+const getSingleBook = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
+  const result = await BookService.getSingleBook(id)
+  sendResponse<Book>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Book fetched successfully',
+    data: result,
+  })
+})
 
 // const updateBook = catchAsync(async (req: Request, res: Response) => {
 //   const ownerInfo = req.user
@@ -151,8 +142,8 @@ const getAllBooksByCategory = catchAsync(async (req: Request, res: Response) => 
 export const BookController = {
   createBook,
   getAllBooks,
-  getAllBooksByCategory
-  //   getSingleBook,
+  getAllBooksByCategory,
+  getSingleBook,
   //   updateBook,
   //   deleteBook,
   //   addToWishlist,
