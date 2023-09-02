@@ -18,12 +18,8 @@ import { bookSearchableFields } from './book.constants'
 
 const createBook = async (
   data: Book
-  //userInfo: JwtPayload | null
+ 
 ): Promise<Book> => {
-  //   console.log(userInfo)
-  //   if (!userInfo) {
-  //     throw new ApiError(401, 'Unauthorized access')
-  //   }
   const result = await prisma.book.create({
     data,
     include: {
@@ -185,10 +181,6 @@ const updateBook = async (
   id: string,
   updatedData: Partial<Book>
 ): Promise<Book | null> => {
-  //   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
-  //   if (!selectedBook) {
-  //     throw new ApiError(401, 'Unauthorized access')
-  //   }
   const result = await prisma.book.update({
     where: {
       id,
@@ -199,78 +191,11 @@ const updateBook = async (
 }
 
 const deleteBook = async (id: string) => {
-  //   const selectedBook = await Book.findOne({ _id: id, owner: ownerInfo?._id })
-  //   if (!selectedBook) {
-  //     throw new ApiError(401, 'Unauthorized access')
-  //   }
   const result = await prisma.book.delete({
     where: { id },
   })
   return result
 }
-
-// const addToWishlist = async (id: string, ownerInfo: JwtPayload | null) => {
-//   const book = await Book.findById(id)
-//   await User.updateOne(
-//     {
-//       _id: ownerInfo?._id,
-//     },
-//     { $addToSet: { wishlist: book } }
-//   )
-// }
-// const addToCurrentlyReading = async (
-//   id: string,
-//   ownerInfo: JwtPayload | null
-// ) => {
-//   const book = await Book.findById(id)
-
-//   await User.findByIdAndUpdate(
-//     {
-//       _id: ownerInfo?._id,
-//     },
-//     { $addToSet: { currentlyReading: book } }
-//   )
-// }
-// const addToPlanToReadSoon = async (
-//   id: string,
-//   ownerInfo: JwtPayload | null
-// ) => {
-//   const book = await Book.findById(id)
-
-//   await User.findByIdAndUpdate(
-//     {
-//       _id: ownerInfo?._id,
-//     },
-//     { $addToSet: { planToReadSoon: book } }
-//   )
-// }
-// const setFinishedReading = async (id: string, ownerInfo: JwtPayload | null) => {
-//   const user = await User.findById(ownerInfo?._id)
-//   console.log(user)
-//   //const book = await Book.findById(id)
-//   await User.updateOne(
-//     {
-//       _id: ownerInfo?._id,
-//     },
-//     {
-//       $pull: {
-//         wishlist: { $in: [id] },
-//         planToReadSoon: { $in: [id] },
-//         currentlyReading: { $in: [id] },
-//       },
-//     }
-//   )
-//   const user1 = await User.findById(ownerInfo?._id)
-//   console.log(user1)
-// }
-// const addReview = async (id: string, review: string) => {
-//   await Book.updateOne(
-//     {
-//       _id: id,
-//     },
-//     { $addToSet: { reviews: review } }
-//   )
-// }
 
 export const BookService = {
   createBook,
@@ -279,9 +204,4 @@ export const BookService = {
   getSingleBook,
   updateBook,
   deleteBook,
-  //   addToWishlist,
-  //   addToCurrentlyReading,
-  //   addToPlanToReadSoon,
-  //   setFinishedReading,
-  //   addReview,
 }
