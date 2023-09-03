@@ -55,7 +55,7 @@ const userLogin = async (payload: IGenericLoginInfo) => {
   )
 
   const refreshToken = jwtHelpers.createToken(
-    { userId:id, role, iat },
+    { userId: id, role, iat },
     config.jwt.jwt_refresh_secret as Secret,
     config.jwt.jwt_refresh_expires_in as string
   )
@@ -130,12 +130,15 @@ const getUser = async (id: string): Promise<Partial<User> | null> => {
   return result
 }
 
-const updateUser = async (id: string, payload: Partial<User>):Promise<Partial<User>> => {
+const updateUser = async (
+  id: string,
+  payload: Partial<User>
+): Promise<Partial<User>> => {
   const isExist = await prisma.user.findUnique({
-    where:{id}
+    where: { id },
   })
-  if(!isExist){
-    throw new ApiError(httpStatus.BAD_REQUEST,"User didn't found!")
+  if (!isExist) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "User didn't found!")
   }
   const result = await prisma.user.update({
     where: {
@@ -155,10 +158,10 @@ const updateUser = async (id: string, payload: Partial<User>):Promise<Partial<Us
   return result
 }
 
-const deleteUser = async(id:string)=>{
+const deleteUser = async (id: string) => {
   const result = await prisma.user.delete({
-    where:{
-      id
+    where: {
+      id,
     },
     select: {
       id: true,
@@ -173,6 +176,18 @@ const deleteUser = async(id:string)=>{
   return result
 }
 
+const getProfile = async (userId: string) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  })
+  if (!result) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User does not exist!')
+  }
+  return result
+}
+
 export const UserService = {
   createUser,
   userLogin,
@@ -180,5 +195,6 @@ export const UserService = {
   getAllUsers,
   getUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getProfile
 }
