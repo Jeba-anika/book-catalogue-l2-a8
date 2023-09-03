@@ -49,13 +49,13 @@ const userLogin = async (payload: IGenericLoginInfo) => {
 
   const iat = Math.floor(Date.now() / 1000)
   const accessToken = jwtHelpers.createToken(
-    { id, role, iat },
+    { userId: id, role, iat },
     config.jwt.jwt_secret as Secret,
     config.jwt.jwt_expires_in as string
   )
 
   const refreshToken = jwtHelpers.createToken(
-    { id, role, iat },
+    { userId:id, role, iat },
     config.jwt.jwt_refresh_secret as Secret,
     config.jwt.jwt_refresh_expires_in as string
   )
