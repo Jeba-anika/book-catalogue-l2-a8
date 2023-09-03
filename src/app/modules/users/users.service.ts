@@ -7,15 +7,14 @@ import {
 } from '../../../interfaces/common'
 import prisma from '../../../shared/prisma'
 import { User } from '@prisma/client'
-import bcrypt from 'bcrypt'
 import { jwtHelpers } from '../../../helpers/jwtHelpers'
 import { Secret } from 'jsonwebtoken'
 
 const createUser = async (payload: User): Promise<Partial<User>> => {
-  payload.password = await bcrypt.hash(
-    payload.password,
-    Number(config.bcrypt_salt_rounds)
-  )
+  // payload.password = await bcrypt.hash(
+  //   payload.password,
+  //   Number(config.bcrypt_salt_rounds)
+  // )
   const result = await prisma.user.create({
     data: payload,
   })
@@ -36,11 +35,7 @@ const userLogin = async (payload: IGenericLoginInfo) => {
   }
 
   if (isUserExist.email) {
-    const isPasswordMatched = await bcrypt.compare(
-      password,
-      isUserExist.password
-    )
-    if (!isPasswordMatched) {
+    if (isUserExist.password !== password) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Password is incorrect')
     }
   }
