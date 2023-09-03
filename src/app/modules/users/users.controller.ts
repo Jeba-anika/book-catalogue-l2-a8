@@ -102,6 +102,18 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const getProfile = catchAsync(
+  async(req: Request, res:Response)=>{
+    const result = await UserService.getProfile(req.user?.userId)
+    sendResponse(res,{
+      statusCode: httpStatus.OK,
+      success:true,
+      message: 'User profile fetched successfully',
+      data: result
+    })
+  }
+)
+
 export const UserController = {
   createUser,
    userLogin,
@@ -109,5 +121,6 @@ export const UserController = {
    getAllUsers,
    getUser,
    updateUser,
-   deleteUser
+   deleteUser,
+   getProfile
 }
