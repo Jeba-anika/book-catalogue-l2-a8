@@ -26,12 +26,18 @@ const userLogin = catchAsync(async (req: Request, res: Response) => {
     httpOnly: true,
   }
   res.cookie('refreshToken', refreshToken, cookieOptions)
-  sendResponse(res, {
+  res.status(200).json({
     statusCode: 200,
     success: true,
-    message: 'User signin successfully!',
-    data: {token: accessToken},
+    message: "User signin successfully!",
+    token: accessToken
   })
+  // sendResponse(res, {
+  //   statusCode: 200,
+  //   success: true,
+  //   message: 'User signin successfully!',
+  //   token: accessToken,
+  // })
 })
 
 const userRefreshToken = catchAsync(async (req: Request, res: Response) => {

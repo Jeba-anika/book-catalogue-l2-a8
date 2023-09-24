@@ -4,12 +4,13 @@
 
 ### Auth (User)
 
-- Route: https://book-catalogue-l2-a8.vercel.app/api/v1/auth/login (POST)
+- Route: https://book-catalogue-l2-a8.vercel.app/api/v1/auth/signin (POST)
 - Route: https://book-catalogue-l2-a8.vercel.app/api/v1/auth/signup (POST)
 - Route: https://book-catalogue-l2-a8.vercel.app/api/v1/users (GET)
 - Route: https://book-catalogue-l2-a8.vercel.app/api/v1/users/6607ac54-56cb-4168-86f0-087bb3980cb3 (GET)
 - Route: https://book-catalogue-l2-a8.vercel.app/api/v1/users/6607ac54-56cb-4168-86f0-087bb3980cb3 (PATCH)
-- Route: https://book-catalogue-l2-a8.vercel.app/api/v1/profile (POST)
+- Route: https://book-catalogue-l2-a8.vercel.app/api/v1/users/e19eb510-d093-4d22-9cc5-ea75d1744718 (DELETE)
+- Route: https://book-catalogue-l2-a8.vercel.app/api/v1/profile (GET)
 
 ### Category
 
